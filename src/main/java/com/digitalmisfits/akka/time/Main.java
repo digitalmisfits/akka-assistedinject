@@ -3,6 +3,8 @@ package com.digitalmisfits.akka.time;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
+import com.digitalmisfits.akka.time.actor.DateActor;
+import com.digitalmisfits.akka.time.actor.DateActorConfig;
 import com.digitalmisfits.akka.time.actor.TimeActor;
 import com.digitalmisfits.akka.time.actor.TimeActorConfig;
 import com.digitalmisfits.akka.time.guice.GuiceActorProducer;
@@ -33,8 +35,11 @@ public class Main {
 
         system.registerExtension(GuiceExtension.provider);
 
-        final ActorRef actorRef = system.actorOf(Props.create(GuiceActorProducer.class, TimeActor.class, new TimeActorConfig("Africa/Windhoek")));
-        actorRef.tell("Tell the time", ActorRef.noSender());
+        final ActorRef timeActorRef = system.actorOf(Props.create(GuiceActorProducer.class, TimeActor.class, new TimeActorConfig("Africa/Windhoek")));
+        final ActorRef dateActorRef = system.actorOf(Props.create(GuiceActorProducer.class, DateActor.class, new DateActorConfig("Africa/Windhoek")));
+
+        timeActorRef.tell("Tell the time", ActorRef.noSender());
+        dateActorRef.tell("Tell the date", ActorRef.noSender());
 
         try {
             int read = System.in.read();

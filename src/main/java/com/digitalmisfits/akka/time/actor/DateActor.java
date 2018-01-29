@@ -9,21 +9,21 @@ import com.google.inject.assistedinject.Assisted;
 import javax.inject.Inject;
 import java.time.ZoneId;
 
-public class TimeActor extends AbstractActor {
+public class DateActor extends AbstractActor {
 
     private final LoggingAdapter log = Logging.getLogger(getContext().getSystem(), this);
     private final Clock clock;
-    private final TimeActorConfig config;
+    private final DateActorConfig config;
 
     @Inject
-    public TimeActor(Clock clock, @Assisted TimeActorConfig config) {
+    public DateActor(Clock clock, @Assisted DateActorConfig config) {
         this.clock = clock;
         this.config = config;
     }
 
     public Receive createReceive() {
         return receiveBuilder()
-                .match(String.class, s -> s.equals("Tell the time"), s -> log.info("The time is {}", clock.now().atZone(ZoneId.of(config.zoneId)).toLocalTime()))
+                .match(String.class, s -> s.equals("Tell the date"), s -> log.info("The date is {}", clock.now().atZone(ZoneId.of(config.zoneId)).toLocalDate()))
                 .matchAny(this::unhandled)
                 .build();
     }

@@ -1,6 +1,7 @@
 package com.digitalmisfits.akka.time;
 
-import com.digitalmisfits.akka.time.actor.TimeActorFactory;
+import com.digitalmisfits.akka.time.actor.DateActor;
+import com.digitalmisfits.akka.time.actor.ActorFactory;
 import com.digitalmisfits.akka.time.actor.TimeActor;
 import com.digitalmisfits.akka.time.time.Clock;
 import com.digitalmisfits.akka.time.time.RealClock;
@@ -14,9 +15,11 @@ public class AkkaModule extends AbstractModule {
 
         binder().requireExplicitBindings();
 
+
         install(new FactoryModuleBuilder()
                 .implement(TimeActor.class, TimeActor.class)
-                .build(TimeActorFactory.class));
+                .implement(DateActor.class, DateActor.class)
+                .build(ActorFactory.class));
 
         bind(Clock.class).to(RealClock.class);
     }

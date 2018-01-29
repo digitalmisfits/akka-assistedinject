@@ -16,7 +16,7 @@ import static com.digitalmisfits.akka.time.guice.GuiceFactory.injector;
 
 public class GuiceActorProducer implements IndirectActorProducer {
 
-    private static final String FACTORY_SUFFIX = "Factory";
+    private static final String FACTORY_CLASS_NAME = "ActorFactory";
 
     private final Class<? extends Actor> actorClass;
     private final ActorConfig config;
@@ -31,12 +31,12 @@ public class GuiceActorProducer implements IndirectActorProducer {
 
         final List<Pair<Binding<?>, Method>> candidates = Lists.newArrayList();
 
-        // find matching binding for class with name *FACTORY_SUFFIX and
+        // find matching binding for class with name *FACTORY_CLASS_NAME and
         // method signature [public <ActorClass> name(ActorConfigImplClass param)]
         for (Binding<?> binding : injector.getAllBindings().values()) {
             final Class<?> rawType = binding.getKey().getTypeLiteral().getRawType();
             if (rawType.isInterface()
-                    && rawType.getSimpleName().equals(actorClass.getSimpleName() + FACTORY_SUFFIX)) {
+                    && rawType.getSimpleName().equals(FACTORY_CLASS_NAME)) {
                 for (Method m : rawType.getMethods()) {
                     if (Modifier.isPublic(m.getModifiers())
                             && m.getReturnType().equals(actorClass)
